@@ -1,5 +1,4 @@
 using CompanyAssistant.Api.Features.AskQuestion;
-using CompanyAssistant.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +19,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<
     IKnowledgeBaseService,
     MarkdownKnowledgeBaseService>();
+
+builder.Services.AddScoped<
+    AskQuestionHandler>();
 
 var app = builder.Build();
 

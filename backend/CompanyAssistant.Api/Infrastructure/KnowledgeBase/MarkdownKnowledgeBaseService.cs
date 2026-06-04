@@ -1,6 +1,4 @@
-using CompanyAssistant.Api.Models;
 
-namespace CompanyAssistant.Api.Services;
 
 public class MarkdownKnowledgeBaseService
     : IKnowledgeBaseService

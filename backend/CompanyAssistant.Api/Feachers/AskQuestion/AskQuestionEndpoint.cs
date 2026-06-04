@@ -1,7 +1,4 @@
-using CompanyAssistant.Api.Services;
-
 namespace CompanyAssistant.Api.Features.AskQuestion;
-
 public static class AskQuestionEndpoint
 {
     public static void MapAskQuestion(
@@ -11,16 +8,11 @@ public static class AskQuestionEndpoint
             "/api/ask",
             async (
                 AskQuestionRequest request,
-                IKnowledgeBaseService kb) =>
+                AskQuestionHandler handler) =>
             {
-                var result =
-                    await kb.SearchAsync(
-                        request.Question);
-
                 return Results.Ok(
-                    new AskQuestionResponse(
-                        result.Content,
-                        result.Source));
+                    await handler.HandleAsync(
+                        request));
             });
     }
 }
