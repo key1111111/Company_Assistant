@@ -40,16 +40,45 @@ public class MarkdownKnowledgeBaseService
             var content =
                 await File.ReadAllTextAsync(file);
 
-            var score = keywords.Count(k =>
-                content.Contains(
-                    k,
-                    StringComparison.OrdinalIgnoreCase));
+            var paragraphs = content
+                .Split(
+                    new[] { "\r\n\r\n", "\n\n" },
+                    StringSplitOptions.RemoveEmptyEntries);
 
-            if (score > bestScore)
+            for (int i = 0; i < paragraphs.Length; i++)
             {
-                bestScore = score;
-                bestContent = content;
-                bestSource = Path.GetFileName(file);
+                var paragraph = paragraphs[i];
+
+                var score = keywords.Count(k =>
+                    paragraph.Contains(
+                        k,
+                        StringComparison.OrdinalIgnoreCase));
+
+                if (score > bestScore)
+                {
+                    bestScore = score;
+
+                    var selected = new List<string>();
+
+                    // Previous paragraph
+                    if (i > 0)
+                        selected.Add(paragraphs[i - 1]);
+
+                    // Matching paragraph
+                    selected.Add(paragraph);
+
+                    // Next paragraph
+                    if (i < paragraphs.Length - 1)
+                        selected.Add(paragraphs[i + 1]);
+
+                    bestContent =
+                        string.Join(
+                            Environment.NewLine + Environment.NewLine,
+                            selected);
+
+                    bestSource =
+                        Path.GetFileName(file);
+                }
             }
         }
 
