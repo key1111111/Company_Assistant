@@ -61,15 +61,15 @@ public class MarkdownKnowledgeBaseService
                     var selected = new List<string>();
 
                     // Previous paragraph
-                    if (i > 0)
-                        selected.Add(paragraphs[i - 1]);
+                   // if (i > 0)
+                   //     selected.Add(paragraphs[i - 1]);
 
                     // Matching paragraph
                     selected.Add(paragraph);
 
                     // Next paragraph
-                    if (i < paragraphs.Length - 1)
-                        selected.Add(paragraphs[i + 1]);
+                  //  if (i < paragraphs.Length - 1)
+                  //      selected.Add(paragraphs[i + 1]);
 
                     bestContent =
                         string.Join(
