@@ -1,5 +1,5 @@
 
-
+using System.Text.RegularExpressions;
 public class MarkdownKnowledgeBaseService
     : IKnowledgeBaseService
 {
@@ -26,6 +26,11 @@ public class MarkdownKnowledgeBaseService
             docsFolder,
             "*.md");
 
+        question = Regex.Replace(
+        question,
+        @"[^\w\s]",
+        "");
+
         var keywords = question
             .ToLower()
             .Split(' ',
@@ -49,10 +54,10 @@ public class MarkdownKnowledgeBaseService
             {
                 var paragraph = paragraphs[i];
 
-                var score = keywords.Count(k =>
-                    paragraph.Contains(
-                        k,
-                        StringComparison.OrdinalIgnoreCase));
+                var score = keywords.Sum(k =>
+                    CountOccurrences(
+                        paragraph,
+                        k));
 
                 if (score > bestScore)
                 {
@@ -92,5 +97,16 @@ public class MarkdownKnowledgeBaseService
         return new SearchResult(
             bestContent,
             bestSource);
+    }
+    private static int CountOccurrences(
+        string text,
+        string keyword)
+    {
+        int count =  Regex.Matches(
+            text,
+            $@"\b{Regex.Escape(keyword)}\b",
+            RegexOptions.IgnoreCase)
+            .Count;
+            return count;
     }
 }
